@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prices-data
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: prices-data
+  template:
+    metadata:
+      labels:
+        app: prices-data
+    spec:
+      containers:
+        - name: prices-data
+          image: bvegam/prices-data:latest
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prices-data
+spec:
+  selector:
+    app: prices-data
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: NodePort
